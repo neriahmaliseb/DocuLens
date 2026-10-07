@@ -111,7 +111,7 @@ The required JavaScript libraries are loaded through CDN links in `index.html`.
 Clone the GitHub repository:
 
 ```bash
-git clone <YOUR-GITHUB-REPOSITORY-URL>
+git clone https://github.com/neriahmaliseb/DocuLens.git
 ```
 
 ### Step 2 – Open the Project Folder
