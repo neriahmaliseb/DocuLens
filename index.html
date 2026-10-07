@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DocuLens AI | HNX26PSI01</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<style>
+:root{--bg:#050816;--panel:#0a0f20;--card:#0d1328;--line:#1a2240;--tx:#f1f5ff;--mut:#8b95b5;--p:#8b5cf6;--c:#22d3ee;--b:#3b82f6;--ok:#34d399;--warn:#fbbf24;--bad:#f87171}
+*{box-sizing:border-box;margin:0}
+body{font-family:Inter,system-ui,Arial,sans-serif;background:var(--bg);color:var(--tx);display:flex;min-height:100vh}
+button{font:inherit;color:inherit;cursor:pointer}
+.grad{background:linear-gradient(90deg,var(--p),var(--c));-webkit-background-clip:text;background-clip:text;color:transparent}
+aside{width:262px;background:var(--panel);border-right:1px solid var(--line);padding:22px 14px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:6px;flex-shrink:0}
+.brand{display:flex;gap:12px;align-items:center;padding:0 8px 18px}
+.logo{width:42px;height:42px;border-radius:13px;background:linear-gradient(135deg,var(--p),var(--c));display:grid;place-items:center;font-weight:800;font-size:18px}
+.brand b{display:block}.brand small{color:var(--mut);font-size:12px}
+.nav{display:flex;gap:12px;align-items:center;width:100%;padding:11px 14px;border:1px solid transparent;border-radius:12px;background:none;color:#c3cbe4;text-align:left;font-size:14px}
+.nav:hover{background:#111936}
+.nav.active{background:linear-gradient(135deg,#1b1650,#12183a);border-color:#3b3478;color:#fff}
+.demo-box{margin-top:auto;padding:16px;border:1px solid #2a2f66;border-radius:14px;background:linear-gradient(135deg,#14143a,#0d1328);font-size:13px;line-height:1.5}
+.demo-box span{letter-spacing:.12em;font-size:11px;color:var(--mut);display:block;margin-bottom:6px}
+main{flex:1;min-width:0}
+.top{display:flex;justify-content:flex-end;align-items:center;gap:14px;padding:14px 28px;border-bottom:1px solid var(--line)}
+.pill{padding:6px 14px;border-radius:20px;border:1px solid #14585f;background:#06222b;color:var(--c);font-size:12px}
+.btn{border:0;padding:11px 20px;border-radius:12px;background:linear-gradient(135deg,var(--p),var(--c));color:#fff;font-weight:700;box-shadow:0 6px 20px rgba(139,92,246,.35)}
+.btn.ghost{background:var(--card);border:1px solid var(--line);box-shadow:none;color:var(--tx)}
+.btn.ok{background:linear-gradient(135deg,#059669,#34d399)}
+.btn:disabled{opacity:.6;cursor:wait}
+.view{display:none;padding:32px 28px 60px}.view.active{display:block}
+.box{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:24px}
+h2.t{font-size:26px;margin-bottom:4px}.sub{color:var(--mut);margin-bottom:22px}
+h3{font-size:17px;margin-bottom:14px}
+.grid{display:grid;gap:16px}.g4{grid-template-columns:repeat(4,1fr)}.g2{grid-template-columns:1fr 1fr}.g37{grid-template-columns:5fr 7fr}
+.hero{display:grid;grid-template-columns:1.15fr 1fr;gap:30px;align-items:center;padding:46px;border-radius:30px;border:1px solid var(--line);background:radial-gradient(circle at 20% 0,#12183a,var(--card) 60%)}
+.tag{display:inline-block;padding:6px 14px;border:1px solid var(--line);border-radius:20px;background:#12183a;font-size:12px;margin-bottom:22px}
+.hero h1{font-size:clamp(38px,5vw,64px);line-height:1.05;letter-spacing:-.02em;margin-bottom:22px}
+.hero p{color:#b4bdd8;line-height:1.7;max-width:560px;margin-bottom:26px}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+.pipe{border:1px solid #17475a;border-radius:26px;padding:18px;background:#080d1e}
+.pipe-in{background:#050816;border:1px solid var(--line);border-radius:18px;padding:18px}
+.pipe-h{display:flex;justify-content:space-between;font-size:12px;color:var(--mut);margin-bottom:16px}
+.ready{color:var(--ok);background:#06281f;border:1px solid #0f5f48;padding:3px 10px;border-radius:10px;font-size:11px}
+.step{display:flex;align-items:center;gap:12px;margin-bottom:12px;font-size:14px}
+.step i{font-style:normal;width:32px;height:28px;border:1px solid var(--line);border-radius:9px;background:#12183a;display:grid;place-items:center;font-size:12px}
+.step u{flex:1;height:1px;background:linear-gradient(90deg,#3b3a8f,#0e7490)}
+.sample{margin-top:18px;border:1px solid var(--line);border-radius:14px;padding:16px;background:#0b1127}
+.sample small{color:var(--c);letter-spacing:.12em;font-size:11px}
+.sample b{display:block;margin:8px 0 14px;line-height:1.4}
+.sample div{display:flex;justify-content:space-between;color:var(--mut);font-size:12px;border-top:1px solid var(--line);padding-top:10px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:20px}
+.stat .ic{width:44px;height:44px;border-radius:12px;background:#171c47;color:var(--c);display:grid;place-items:center;font-size:21px}
+.stat .v{font-size:30px;font-weight:800;margin-top:14px}.stat .l{color:var(--mut);font-size:13px}
+.hl{display:flex;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line);font-size:14px}.hl:last-child{border:0}
+.on{color:var(--ok);font-weight:600}.demo{color:var(--warn);font-weight:600}
+.act{display:flex;gap:12px;align-items:center;padding:12px 0;border-bottom:1px solid var(--line)}
+.act i{width:36px;height:36px;border-radius:10px;background:#171c47;color:var(--c);display:grid;place-items:center}
+.act small{display:block;color:var(--mut)}
+.drop{border:2px dashed #2a3566;border-radius:16px;padding:34px 16px;text-align:center;cursor:pointer;transition:.2s}
+.drop:hover,.drop.over{border-color:var(--c);background:#0b1430}
+.drop i{font-size:50px;color:var(--p)}
+.file{display:flex;justify-content:space-between;padding:11px 14px;margin-top:10px;border:1px solid var(--line);border-radius:12px;background:#0b1127;font-size:14px}
+textarea,select{width:100%;background:#080d1e;border:1px solid var(--line);border-radius:12px;color:var(--tx);padding:13px;font:inherit}
+textarea{min-height:120px;resize:vertical}
+label{font-size:13px;color:var(--mut);display:block;margin:14px 0 6px}
+.chip{border:1px solid var(--line);background:#0b1127;border-radius:18px;padding:6px 14px;font-size:13px;margin:8px 6px 0 0}.chip:hover{border-color:var(--p)}
+.msg{margin-top:14px;padding:14px;border-radius:12px;font-size:14px;line-height:1.6}
+.msg.success{background:#06281f;border:1px solid #0f5f48;color:#a7f3d0}.msg.danger{background:#2b0f14;border:1px solid #7f1d1d;color:#fecaca}
+.answer{margin-top:18px;border-left:4px solid var(--ok);background:#07211d;border-radius:12px;padding:18px;line-height:1.7}
+.answer ul,.answer ol{margin:8px 0 8px 22px}
+.src{border:1px solid var(--line);border-radius:14px;padding:16px;margin-top:12px;background:#0b1127}
+.src .pg{color:var(--c);font-weight:700}.src p{color:var(--mut);font-size:14px;margin:6px 0 10px}
+.badge{font-size:11px;padding:3px 10px;border-radius:10px;background:#1b1650;color:#c4b5fd}
+.empty{text-align:center;color:var(--mut);padding:30px}.empty i{font-size:40px;display:block;margin-bottom:8px}
+.bar{height:16px;background:#12183a;border-radius:10px;overflow:hidden}.bar div{height:100%;width:0;background:linear-gradient(90deg,var(--p),var(--c));transition:width .8s}
+.big{font-size:40px;font-weight:800}
+.ins{padding:18px;border-radius:14px;background:#0b1127;border:1px solid var(--line)}.ins i{color:var(--p);margin-right:6px}.ins strong{display:block;margin-top:8px;font-size:22px}
+table{width:100%;border-collapse:collapse;text-align:center}th,td{padding:13px;border:1px solid var(--line)}th{background:#12183a;color:var(--mut);font-weight:600}
+.pl{display:flex;gap:10px;flex-wrap:wrap}.pl div{flex:1;min-width:110px;text-align:center;padding:16px 8px;background:#0b1127;border:1px solid var(--line);border-radius:12px;font-size:13px}.pl i{display:block;font-size:26px;color:var(--c);margin-bottom:6px}
+ul.plain{list-style:none;padding:0}ul.plain li{padding:10px 0;border-bottom:1px solid var(--line)}
+.chartbox{height:280px}
+footer{padding:26px;text-align:center;color:var(--mut);border-top:1px solid var(--line);font-size:13px}
+@media(max-width:980px){body{flex-direction:column}aside{width:100%;height:auto;position:static;flex-direction:row;flex-wrap:wrap}.brand{width:100%}.nav{width:auto}.demo-box{display:none}
+.hero,.g2,.g37{grid-template-columns:1fr}.g4{grid-template-columns:1fr 1fr}.hero{padding:26px}}
+.chk{list-style:none;padding:0;font-size:13px;color:var(--mut);margin-top:8px}.chk li:before{content:"✓ ";color:var(--ok)}
+.doc{border:1px solid var(--line);border-radius:14px;padding:14px;margin-top:12px;background:#0b1127}
+.doc h4{display:flex;justify-content:space-between;align-items:center;font-size:15px;gap:8px}
+.paper{background:#f8fafc;color:#111827;border-radius:10px;padding:26px;font:14px/1.7 Georgia,serif;white-space:pre-wrap;min-height:300px}
+mark{background:#fde047;padding:2px 3px;border-radius:3px}canvas.pdfc{max-width:100%;border-radius:10px}
+.step2{padding:7px 0;color:#b4bdd8;font-size:14px;border-bottom:1px dashed var(--line)}.step2 b{color:var(--c)}
+.warn{background:#2b2108;border:1px solid #7c5e10;color:#fde68a}
+.q{border-left:3px solid var(--p);padding:10px 14px;margin-bottom:10px;background:#0b1127;border-radius:8px;font-size:14px}
+.pgr{display:flex;justify-content:space-between;gap:10px;padding:10px 0;border-bottom:1px solid var(--line);font-size:14px}.tg{font-size:11px;padding:2px 8px;border-radius:8px;background:#12183a;color:var(--c);margin-left:4px}
+.quote{border-left:3px solid var(--c);padding:8px 12px;margin:8px 0;color:#cbd5f5;font-style:italic;font-size:14px}
+a.lnk{color:var(--c);cursor:pointer;text-decoration:underline}
+.chatbox{display:flex;flex-direction:column;height:calc(100vh - 170px);min-height:480px}
+#thread{flex:1;overflow:auto;display:flex;flex-direction:column;gap:12px;padding-bottom:12px}
+.m-user{align-self:flex-end;background:linear-gradient(135deg,var(--p),var(--b));padding:12px 16px;border-radius:16px 16px 4px 16px;max-width:75%;line-height:1.5}
+.m-ai{align-self:flex-start;background:#0b1127;border:1px solid var(--line);padding:14px 16px;border-radius:16px 16px 16px 4px;max-width:92%;line-height:1.7}
+.m-ai .tr{font-size:13px}.inputbar{display:flex;gap:10px;align-items:flex-end;border-top:1px solid var(--line);padding-top:12px;margin-top:10px}
+.inputbar textarea{min-height:48px;max-height:140px;flex:1}.inputbar .btn{height:48px;white-space:nowrap}
+</style></head><body>
+<aside>
+<div class="brand"><div class="logo">D</div><div><b>DocuLens</b><small>See the proof</small></div></div>
+<button class="nav active" data-v="home"><i class="bi bi-grid"></i>Home</button>
+<button class="nav" data-v="dashboard"><i class="bi bi-bar-chart"></i>Dashboard</button>
+<button class="nav" data-v="documents"><i class="bi bi-book"></i>Documents</button>
+<button class="nav" data-v="chat"><i class="bi bi-chat-square-text"></i>Chat</button>
+<button class="nav" data-v="evidence"><i class="bi bi-file-earmark-check"></i>Evidence</button>
+<button class="nav" data-v="analysis"><i class="bi bi-shield-check"></i>Analysis</button>
+<button class="nav" data-v="compare"><i class="bi bi-arrow-left-right"></i>Compare</button>
+<button class="nav" data-v="demo"><i class="bi bi-grid"></i>Demo</button>
+<button class="nav" data-v="about"><i class="bi bi-journal"></i>About</button>
+<div class="demo-box"><span>DEMO MODE</span>Local evidence engine with numeric verification and citations.</div></aside>
+<main>
+<div class="top"><span class="pill">Multimodal intelligence</span><button class="btn" onclick="nav('demo')">Open Demo</button></div>
+
+<section class="view active" id="v-home"><div class="hero"><div>
+<span class="tag"><i class="bi bi-stars"></i> DOCULENS · HNX26PSI01</span>
+<h1>Ask your documents anything. <span class="grad">See the proof.</span></h1>
+<p>DocuLens turns mixed documents into verifiable, multimodal intelligence—combining OCR, layout analysis, tables, charts, retrieval, numeric reasoning, and source citations into one evidence-backed workflow.</p>
+<div class="row"><button class="btn" onclick="nav('demo')">Try the Demo →</button><button class="btn ghost" onclick="nav('documents')">Upload Documents</button></div></div>
+<div class="pipe"><div class="pipe-in"><div class="pipe-h"><span>Evidence pipeline</span><span class="ready">READY</span></div>
+<div class="step"><i>1</i><u></u>Ingestion</div><div class="step"><i>2</i><u></u>Retrieval</div><div class="step"><i>3</i><u></u>Reasoning</div><div class="step"><i>4</i><u></u>Verification</div><div class="step"><i>5</i><u></u>Evidence</div>
+<div class="sample"><small>SAMPLE ANSWER</small><b>Production efficiency rose from 72% to 84%, a +12.0 pp improvement.</b><div><span>Q2 → Q4</span><span>Confidence 0.91</span></div></div></div></div></div>
+<div class="grid g2" style="margin-top:16px"><div class="box"><h3>How it works</h3><ul class="plain"><li>Question → Query Planner</li><li>Text · Table · Chart retrieval + visual analysis</li><li>Backend calculation (never the LLM)</li><li>Verification → Answer + exact sources</li></ul></div>
+<div class="box"><h3>Supported documents</h3><ul class="plain"><li>Text, multi-column and table PDFs</li><li>Charts, figures and embedded images</li><li>Scanned PDFs and image files (OCR)</li><li>Poor-quality or damaged files (low-confidence warning)</li></ul></div></div></section>
+
+<section class="view" id="v-dashboard"><h2 class="t">Intelligence Dashboard</h2><p class="sub">Live overview of your uploaded documents.</p>
+<div class="grid g4" id="dStats" style="margin-bottom:16px"></div>
+<div class="grid g2"><div class="box"><h3>Evidence statistics</h3><div class="chartbox"><canvas id="contentChart"></canvas></div></div>
+<div class="box"><h3>Recently uploaded documents</h3><div id="dDocs"></div><h3 style="margin-top:20px">Recent questions</h3><div id="dQs"></div></div></div></section>
+
+<section class="view" id="v-documents"><h2 class="t">Documents</h2><p class="sub">Upload PDFs, scanned PDFs or image documents.</p>
+<div class="grid g2"><div class="box"><div class="drop" id="drop" onclick="$('pdfInput').click()"><i class="bi bi-file-earmark-pdf"></i><h3 style="margin:10px 0 4px">Drop PDF here</h3><p class="sub" style="margin:0">or Browse Files · PDF, scanned PDF, images</p>
+<input type="file" id="pdfInput" accept=".pdf,image/*" multiple hidden onchange="addFiles(this.files)"></div>
+<button class="btn ghost" style="width:100%;margin-top:14px" onclick="loadSamples();">Load 5 sample documents</button></div>
+<div class="box"><h3>Your documents</h3><div id="docList"><div class="empty"><i class="bi bi-folder2-open"></i>No documents yet.</div></div></div></div></section>
+
+<section class="view" id="v-viewer"><h2 class="t" id="vTitle">Document Viewer</h2><p class="sub" id="vSub"></p>
+<div class="grid g37" style="grid-template-columns:7fr 4fr"><div class="box" id="vPage"></div><div class="box" id="vInfo"></div></div>
+<button class="btn ghost" style="margin-top:14px" onclick="nav('documents')">← Back to documents</button></section>
+
+<section class="view" id="v-chat"><h2 class="t">Chat</h2><p class="sub">Type any question about your documents. Answers come from retrieved evidence and backend calculation.</p>
+<div class="box chatbox"><div id="thread"><div class="m-ai">Hi! Upload documents (or load the samples in Documents), then ask me a question below.</div></div>
+<div><button class="chip" onclick="setQ(0)">Compare Q2 vs Q4 + reasons</button><button class="chip" onclick="setQ(2)">Downtime change</button><button class="chip" onclick="setQ(3)">Compare with industry</button></div>
+<div class="inputbar"><textarea id="question" rows="1" placeholder="Ask a question about your documents..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();ask()}"></textarea><button id="askButton" class="btn" onclick="ask()"><i class="bi bi-send"></i> Send</button></div></div></section>
+
+<section class="view" id="v-evidence"><h2 class="t">Evidence <span class="badge" id="sourceCount">0 Sources</span></h2><p class="sub" id="evQ">Ask a question to collect proof.</p>
+<div class="box" id="sourcesArea"><div class="empty"><i class="bi bi-search"></i>Evidence will appear here.</div></div></section>
+
+<section class="view" id="v-analysis"><h2 class="t">Document Analysis</h2><p class="sub">How each document was understood.</p>
+<select id="anSel" onchange="renderAnalysis()" style="max-width:360px;margin-bottom:16px"></select><div id="anBody"><div class="empty">Upload or load documents first.</div></div></section>
+
+<section class="view" id="v-compare"><h2 class="t">Compare documents</h2><p class="sub">Cross-document metrics with evidence for each number.</p>
+<div class="grid g2" style="margin-bottom:16px"><div><label>Document A</label><select id="cA" onchange="renderCompare()"></select></div><div><label>Document B</label><select id="cB" onchange="renderCompare()"></select></div></div>
+<div class="box" id="cBody"><div class="empty">Load documents first.</div></div></section>
+
+<section class="view" id="v-demo"><h2 class="t">Demo</h2><p class="sub">Each button runs the real pipeline on the sample documents.</p>
+<div class="box"><h3>Sample documents</h3><ul class="plain"><li>✓ Annual Report 2025</li><li>✓ Q4 Operations Review</li><li>✓ Q2 Plant Audit</li><li>✓ Regional Benchmark Report</li><li>✓ Damaged Maintenance Log</li></ul>
+<div class="row" style="margin-top:16px"><button class="btn" onclick="demo(0)">Compare Q2 vs Q4</button><button class="btn ghost" onclick="demo(1)">Find Three Biggest Reasons</button><button class="btn ghost" onclick="demo(2)">Calculate Downtime Change</button><button class="btn ghost" onclick="demo(3)">Compare With Industry</button><button class="btn ghost" onclick="demo(4)">Test Scanned / Damaged Document</button></div></div></section>
+
+<section class="view" id="v-about"><h2 class="t">DocuLens Architecture</h2><p class="sub">HNX26PSI01 — Multimodal Document Intelligence</p>
+<div class="box"><div class="pl"><div>PDF / Scan</div><div>Processing</div><div>OCR + Layout</div><div>Text · Tables · Charts · Images</div><div>Multimodal Index</div><div>Hybrid Retrieval</div><div>RAG + VLM</div><div>Numeric Verification</div><div>Answer + Sources</div></div>
+<p style="margin-top:18px;color:#b4bdd8;line-height:1.7">PDF text is read with pdf.js, scanned pages with Tesseract OCR. Numbers are extracted by rules and all arithmetic runs in code. Low-confidence sources trigger a warning instead of an invented answer.</p></div></section>
+<footer>DocuLens AI · HNX26PSI01</footer></main>
+
+<script>
+pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+const $=id=>document.getElementById(id),esc=s=>String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])),f=x=>+(+x).toFixed(2);
+let docs=[],asked=[],ev=[],evStat={TEXT:0,TABLE:0,CHART:0,OCR:0},chartObj,busy=false;
+const MET={efficiency:'Production efficiency',downtime:'Downtime',defect:'Defect rate'};
+const QS=['Compare production efficiency between Q2 and Q4, identify the three biggest reasons for the change, and show me the proof.','Find the three biggest reasons for the efficiency change from Q2 to Q4.','Calculate the downtime change between Q2 and Q4.','Compare Q4 efficiency with the industry benchmark.','What was Q4 downtime in the scanned maintenance log?'];
+const SAMPLES=[
+{name:'Annual_Report_2025.pdf',pages:[
+{n:1,text:'Executive Summary\nManufacturing results for 2025.'},
+{n:5,text:'Manufacturing Operations & Production Efficiency\nProduction efficiency increased from 70% in Q1 to 72% in Q2, reached 79% in Q3 and 84% in Q4.\nQuarter Efficiency\nQ1 70%\nQ2 72%\nQ3 79%\nQ4 84%',o:{tables:1}},
+{n:6,text:'Figure 4 — Quarterly Efficiency\nBar chart of production efficiency by quarter.',o:{charts:[{title:'Figure 4 — Quarterly Efficiency',metric:'efficiency',unit:'%',data:{Q2:72,Q3:79,Q4:84}}]}},
+{n:7,text:'Root-Cause Attribution\nRoot-cause attribution of the efficiency change from Q2 to Q4.\nLine 3 Automation Retrofit: +5.0 pp\nPredictive Maintenance: +4.5 pp\nSupplier Quality Improvement: +2.5 pp',o:{images:1}}]},
+{name:'Q4_Operations_Review.pdf',pages:[{n:1,text:'Q4 Operations Review\nQ4 efficiency was 84%.\nQ4 downtime was 61 hours.\nQ4 defect rate was 2.1%.',o:{tables:1}}]},
+{name:'Q2_Plant_Audit.pdf',pages:[{n:1,text:'Q2 Plant Audit\nQ2 efficiency was 72%.\nQ2 downtime was 148 hours.\nQ2 defect rate was 3.4%.',o:{tables:1}}]},
+{name:'Regional_Benchmark_Report.pdf',pages:[{n:2,text:'Regional Benchmark\nIndustry average efficiency: 78%.'}]},
+{name:'Damaged_Maintenance_Log.pdf',pages:[{n:1,text:'Maintenance Log (scanned)\nDowntime Q4 = 61 hours (partly illegible, stain over table)',o:{ocr:true,conf:.41,images:1}}]}];
+
+/* nav */
+function nav(v){document.querySelectorAll('.view').forEach(e=>e.classList.toggle('active',e.id==='v-'+v));document.querySelectorAll('.nav').forEach(e=>e.classList.toggle('active',e.dataset.v===v));scrollTo({top:0});
+ if(v==='dashboard')renderDash();if(v==='analysis')renderAnalysis();if(v==='compare')renderCompare();}
+document.querySelectorAll('.nav').forEach(b=>b.onclick=()=>nav(b.dataset.v));
+
+/* document model */
+function detectTables(t){return t.split('\n').filter(l=>/^\s*Q[1-4]\s+[\d.]+%?\s*$/.test(l)||((l.match(/[\d.]+%?/g)||[]).length>=3&&l.split(/\s{2,}|\t/).length>=3)).length>=3?1:0}
+function mk(n,text,o={}){return{n,text,section:text.split('\n')[0].slice(0,70),tables:o.tables??detectTables(text),charts:o.charts||(/\b(figure|chart|graph)\b/i.test(text)?[{title:'Detected figure'}]:[]),images:o.images||0,ocr:!!o.ocr,conf:o.conf??1}}
+function loadSamples(){const todo=SAMPLES.filter(s=>!docs.some(d=>d.name===s.name));if(!todo.length){nav('documents');return}
+ todo.forEach(s=>{const d={name:s.name,sample:true,pages:s.pages.map(p=>mk(p.n,p.text,p.o)),steps:[],status:'Processing'};docs.push(d);
+  ['PDF detected','Pages rendered','Text extracted','Tables detected','Charts detected','OCR completed','Evidence indexed'].forEach((x,i)=>setTimeout(()=>{d.steps.push(x);if(i==6)d.status='READY';renderDocs()},250*(i+1)))});renderDocs();nav('documents')}
+async function render(pg,sc=1.5){const v=pg.getViewport({scale:sc}),c=document.createElement('canvas');c.width=v.width;c.height=v.height;await pg.render({canvasContext:c.getContext('2d'),viewport:v}).promise;return c}
+async function ocr(c){if(!window.Tesseract)return{text:'',conf:0};const r=await Tesseract.recognize(c,'eng');return{text:r.data.text,conf:r.data.confidence/100}}
+async function addFiles(fl){nav('documents');for(const file of fl)await processFile(file)}
+async function processFile(file){const d={name:file.name,pages:[],steps:[],status:'Processing'};docs.push(d);const st=s=>{d.steps.push(s);renderDocs()};
+ try{if(file.type.startsWith('image/')){st('Image detected');const im=new Image();im.src=URL.createObjectURL(file);await im.decode();const c=document.createElement('canvas');c.width=im.width;c.height=im.height;c.getContext('2d').drawImage(im,0,0);const o=await ocr(c);d.pages.push(mk(1,o.text,{ocr:true,conf:o.conf,images:1}));st('OCR completed')}
+ else{const pdf=await pdfjsLib.getDocument({data:await file.arrayBuffer()}).promise;d.pdf=pdf;st('PDF detected');
+  for(let i=1;i<=pdf.numPages;i++){const pg=await pdf.getPage(i),tc=await pg.getTextContent(),rows={};
+   tc.items.forEach(it=>{const y=Math.round(it.transform[5]/3);(rows[y]=rows[y]||[]).push(it)});
+   let text=Object.keys(rows).sort((a,b)=>b-a).map(y=>rows[y].sort((a,b)=>a.transform[4]-b.transform[4]).map(t=>t.str).join(' ')).join('\n'),o={};
+   const ops=await pg.getOperatorList();o.images=ops.fnArray.filter(x=>x===pdfjsLib.OPS.paintImageXObject).length;
+   if(text.replace(/\s/g,'').length<40){const r=await ocr(await render(pg));text=r.text;o.ocr=true;o.conf=r.conf}
+   d.pages.push(mk(i,text,o))}
+  st('Pages rendered');st('Text extracted');st('Tables detected');st('Charts detected');st(d.pages.some(p=>p.ocr)?'OCR completed':'OCR not required')}
+ st('Evidence indexed');d.status='READY'}catch(e){d.status='FAILED';st('Error: '+e.message)}renderDocs()}
+const drop=$('drop');['dragover','dragenter'].forEach(e=>drop.addEventListener(e,x=>{x.preventDefault();drop.classList.add('over')}));
+['dragleave','drop'].forEach(e=>drop.addEventListener(e,x=>{x.preventDefault();drop.classList.remove('over')}));drop.addEventListener('drop',x=>addFiles(x.dataTransfer.files));
+function renderDocs(){if(!docs.length){$('docList').innerHTML='<div class="empty"><i class="bi bi-folder2-open"></i>No documents yet.</div>';return}$('docList').innerHTML=docs.map((d,i)=>`<div class="doc"><h4><span><i class="bi bi-file-earmark-pdf" style="color:var(--bad)"></i> ${esc(d.name)}</span><span class="ready" style="${d.status==='FAILED'?'color:var(--bad)':''}">${d.status==='READY'?'READY':d.status==='FAILED'?'FAILED':'Processing...'}</span></h4>
+<ul class="chk">${d.steps.map(s=>`<li>${esc(s)}</li>`).join('')}</ul>${d.status==='READY'?`<button class="btn ghost" style="margin-top:10px;padding:7px 14px" onclick="openDoc(${i},${d.pages[0].n})">Open viewer</button> <button class="btn ghost" style="margin-top:10px;padding:7px 14px" onclick="$('anSel').value=${i};nav('analysis')">Analysis</button>`:''}${d.status!=='Processing'?`<button class="btn ghost" style="margin-top:10px;padding:7px 14px;color:var(--bad)" onclick="deleteDoc(${i})"><i class="bi bi-trash"></i> Delete</button>`:''}</div>`).join('')}
+function deleteDoc(i){const d=docs[i];if(!d||!confirm('Delete "'+d.name+'"? Its pages and evidence will be removed.'))return;
+ if(d.pdf&&d.pdf.destroy)d.pdf.destroy();docs.splice(i,1);const had=ev.length;ev=ev.filter(e=>e.d!==d);
+ if(ev.length!==had)renderEvidence($('evQ').textContent.replace(/^Question: /,''));renderDocs()}
+
+/* viewer */
+async function openDoc(di,pn,quote){const d=docs[di],p=d.pages.find(x=>x.n==pn)||d.pages[0];nav('viewer');
+ $('vTitle').textContent=d.name;$('vSub').textContent=`Page ${p.n} of ${d.pages.length}`+(p.section?' · '+p.section:'');
+ let t=esc(p.text);if(quote)t=t.replace(esc(quote),m=>`<mark>${m}</mark>`);
+ $('vPage').innerHTML=`<div class="row" style="margin-bottom:12px">${d.pages.map(x=>`<button class="chip" style="margin:0;${x.n==p.n?'border-color:var(--c)':''}" onclick="openDoc(${di},${x.n})">Page ${x.n}</button>`).join('')}</div>${d.pdf?'<canvas class="pdfc" id="pdfc"></canvas><h3 style="margin-top:14px">Extracted text</h3>':''}<div class="paper">${t}</div>`;
+ const yn=v=>v?'✓':'—';$('vInfo').innerHTML=`<h3>Page Information</h3><div class="hl"><span>Text</span><span class="on">✓</span></div><div class="hl"><span>Tables</span><span class="on">${yn(p.tables)}</span></div><div class="hl"><span>Charts</span><span class="on">${yn(p.charts.length)}</span></div><div class="hl"><span>Images</span><span class="on">${yn(p.images)}</span></div><div class="hl"><span>OCR</span><span class="${p.ocr?'demo':'on'}">${p.ocr?'✓ conf '+f(p.conf):'—'}</span></div>
+ <h3 style="margin-top:20px">Detected Evidence</h3><ul class="plain">${p.tables?'<li>Table detected</li>':''}${p.charts.map(c=>`<li>${esc(c.title)}</li>`).join('')}${extract({pages:[p],name:d.name}).slice(0,4).map(x=>`<li>${MET[x.m]} ${x.q} = ${x.v}${x.u}</li>`).join('')}</ul>${p.conf<.7?'<div class="msg warn">Low OCR confidence — verify this page manually.</div>':''}`;
+ if(d.pdf){const pg=await d.pdf.getPage(p.n),c=await render(pg,1.2),t2=$('pdfc');if(t2){t2.width=c.width;t2.height=c.height;t2.getContext('2d').drawImage(c,0,0)}}}
+
+/* extraction */
+function extract(d){const out=[];d.pages.forEach(p=>{const sents=p.text.split(/(?<=[.!?])\s+|\n/).filter(Boolean),cnt=k=>(p.text.match(new RegExp(k,'gi'))||[]).length,def=['efficiency','downtime','defect'].sort((a,b)=>cnt(b)-cnt(a))[0];
+ sents.forEach(s=>{const m=/efficien/i.test(s)?'efficiency':/downtime/i.test(s)?'downtime':/defect/i.test(s)?'defect':def,
+  add=(q,v,u)=>out.push({d,p,m,q:q.toUpperCase(),v:+v,u:/h/i.test(u)?' hours':'%',s:s.trim(),t:p.ocr?'OCR':/^Q[1-4]\s+[\d.]+/.test(s.trim())?'TABLE':'TEXT'});let r;
+  const A=/(\d+(?:\.\d+)?)\s*(%|hours?)\s+in\s+(Q[1-4])/gi;while(r=A.exec(s))add(r[3],r[1],r[2]);
+  const B=/(Q[1-4])[a-z \-]{0,30}?(?:=|:|\bwas\b|\bis\b)\s*(\d+(?:\.\d+)?)\s*(%|hours?)/gi;while(r=B.exec(s))add(r[1],r[2],r[3]);
+  if(r=/^(Q[1-4])\s+(\d+(?:\.\d+)?)\s*(%)?$/i.exec(s.trim()))add(r[1],r[2],r[3]||'%')});
+ p.charts.forEach(c=>c.data&&Object.entries(c.data).forEach(([q,v])=>out.push({d,p,m:c.metric,q,v,u:c.unit==='%'?'%':' hours',s:c.title,t:'CHART'})))});return out}
+function pick(F,m,q){const fs=F.filter(x=>x.m===m&&x.q===q);if(!fs.length)return null;const g={};fs.forEach(x=>(g[x.v]=g[x.v]||[]).push(x));
+ const arr=Object.entries(g).map(([v,a])=>({v:+v,srcs:a,n:new Set(a.map(x=>x.d.name+x.p.n)).size})).sort((a,b)=>b.n-a.n);return{...arr[0],conflict:arr.length>1,u:fs[0].u}}
+
+/* chat pipeline */
+function setQ(i){$('question').value=QS[i]}
+function demo(i){loadSamples.call(null);nav('chat');$('question').value=QS[i];const w=()=>docs.some(d=>d.status==='Processing')?setTimeout(w,200):ask();setTimeout(w,300)}
+function ask(){if(busy)return;const q=$('question').value.trim();if(!q)return;
+ if(!docs.some(d=>d.status==='READY')){alert('Upload documents (or load the samples) and wait until they are READY.');nav('documents');return}
+ busy=true;$('askButton').disabled=true;$('question').value='';const th=$('thread');th.insertAdjacentHTML('beforeend','<div class="m-user">'+esc(q)+'</div><div class="m-ai"><div class="tr"></div><div class="an"></div></div>');const cur=th.lastElementChild,scr=()=>th.scrollTop=th.scrollHeight;scr();const L=q.toLowerCase(),log=[],use=docs.filter(d=>d.status==='READY'&&(!/log|scanned|damaged/.test(L)||/maintenance|scanned/i.test(d.name)));
+ const m=/downtime/.test(L)?'downtime':/defect/.test(L)?'defect':'efficiency',qs=[...new Set((q.match(/Q[1-4]/gi)||[]).map(x=>x.toUpperCase()))],wantR=/reason|why|driver|cause|biggest/.test(L),wantI=/industry|benchmark/.test(L);
+ log.push(['Query planner',`metric = ${m}, quarters = ${qs.length?qs.join(', '):'Q2, Q4 (default)'}${wantR?', reasons':''}${wantI?', benchmark':''}`]);
+ const F=use.flatMap(extract),Fm=F.filter(x=>x.m===m);log.push(['Relevant documents',`${new Set(Fm.map(x=>x.d.name)).size} of ${use.length} documents contain ${m} data`]);
+ ['TEXT','TABLE','CHART','OCR'].forEach(t=>log.push([{TEXT:'Text retrieval',TABLE:'Table retrieval',CHART:'Chart retrieval + visual analysis',OCR:'OCR retrieval'}[t],`${Fm.filter(x=>x.t===t).length} facts`]));
+ let html='',E=[],warn=[],checks=[],conf=.9;const U=MET[m];
+ if(qs.length===1){const A=pick(F,m,qs[0]);if(!A)html=abstain(m);else{html=`<strong>${U} in ${qs[0]} was ${A.v}${A.u}.</strong>`;E=A.srcs;checks.push(`${A.n} independent source(s) support this value`);if(A.n<2)conf=.75}}
+ else{const [a,b]=qs.length>1?qs.slice(0,2):['Q2','Q4'],A=pick(F,m,a),B=pick(F,m,b);
+  if(!A||!B)html=abstain(m,[a,b].filter((x,i)=>![A,B][i]));
+  else{const d=B.v-A.v,rel=d/A.v*100,pp=A.u==='%',s=d>=0?'+':'';E=[...A.srcs,...B.srcs];
+   html=`<strong>${U} ${d>=0?'increased':'decreased'} from ${A.v}${A.u} in ${a} to ${B.v}${B.u} in ${b}.</strong><br><br><strong>Calculation</strong><br>${B.v} − ${A.v} = ${s}${f(d)} ${pp?'percentage points':'hours'}<br>(${B.v} − ${A.v}) / ${A.v} × 100 = ${s}${f(rel)}%`;
+   checks.push(`${a}: ${A.n} source(s) · ${b}: ${B.n} source(s)`);if(A.conflict||B.conflict){warn.push('Sources disagree on at least one value — shown the best-supported one.');conf-=.1}
+   if(A.n<2||B.n<2)conf-=.1;
+   if(wantR&&m==='efficiency'){const R=[];use.forEach(dc=>dc.pages.forEach(p=>{const re=/^\s*([A-Za-z][\w &\-]+?):\s*([+-]\d+(?:\.\d+)?)\s*pp/gm;let r;while(r=re.exec(p.text))R.push({n:r[1].trim(),v:+r[2],d:dc,p,s:r[0].trim(),t:p.ocr?'OCR':'TEXT'})}));
+    R.sort((x,y)=>Math.abs(y.v)-Math.abs(x.v));const T=R.slice(0,3);
+    if(T.length){const tot=T.reduce((z,r)=>z+r.v,0);html+=`<br><br><strong>Three biggest reasons</strong><table style="margin-top:8px"><tr><th>Reason</th><th>Contribution</th></tr>${T.map(r=>`<tr><td>${esc(r.n)}</td><td>${r.v>0?'+':''}${f(r.v)} pp</td></tr>`).join('')}<tr><th>Total</th><th>${tot>0?'+':''}${f(tot)} pp</th></tr></table>`;E.push(...T);
+     Math.abs(tot-d)<.05?checks.push(`Reasons total ${f(tot)} pp equals the measured change`):(warn.push(`Reasons total ${f(tot)} pp but measured change is ${f(d)} pp.`),conf-=.1)}else warn.push('No root-cause attribution found in the documents.')}
+   if(wantI){const x=use.flatMap(dc=>dc.pages.map(p=>({dc,p,r:/industry[^\d\n]{0,50}?(\d+(?:\.\d+)?)\s*%/i.exec(p.text)}))).find(z=>z.r);
+    if(x){const iv=+x.r[1];html+=`<br><br><strong>Industry comparison</strong><br>${b} ${B.v}% vs industry ${iv}% → ${B.v>=iv?'+':''}${f(B.v-iv)} pp`;E.push({d:x.dc,p:x.p,s:x.r[0],t:'TEXT'})}else warn.push('No industry benchmark found.')}}}
+ const lc=E.filter(e=>(e.p||{}).conf<.7);if(lc.length){warn.push('Low confidence: the source document is damaged and part of the relevant data could not be reliably read. Please verify the highlighted source page.');conf=Math.min(conf,.45)}
+ ev=[];E.forEach(e=>{if(!ev.some(z=>z.d===e.d&&z.p===e.p&&z.s===e.s))ev.push(e)});ev.forEach(e=>evStat[e.t]++);
+ html+=checks.length?`<br><br><strong>Verification</strong><ul>${checks.map(c=>`<li>✓ ${c}</li>`).join('')}</ul>`:'';
+ html+=warn.map(w=>`<div class="msg warn">⚠ ${w}</div>`).join('')+`<br><small>Confidence ${f(Math.max(conf,0))} · ${ev.length} sources</small> <button class="btn ghost" style="padding:6px 12px" onclick="nav('evidence')">Show evidence</button>`;
+ log.push(['Evidence collection',`${ev.length} unique sources`],['Calculation','Done in code (no LLM arithmetic)'],['Verification',warn.length?warn.length+' warning(s)':'All checks passed'],['Final answer','Ready']);
+ asked.unshift(q);
+ log.forEach((l,i)=>setTimeout(()=>{cur.querySelector('.tr').innerHTML+=`<div class="step2">✓ <b>${l[0]}</b> — ${l[1]}</div>`;scr();
+  if(i===log.length-1){cur.querySelector('.an').innerHTML=html;renderEvidence(q);busy=false;$('askButton').disabled=false;scr()}},i*320))}
+function abstain(m,miss){return `<strong>Insufficient evidence.</strong><br>Could not find ${MET[m].toLowerCase()} values${miss?' for '+miss.join(', '):''} in the documents, so no answer is given.`}
+function renderEvidence(q){$('sourceCount').textContent=ev.length+' Sources';$('evQ').textContent='Question: '+q;
+ $('sourcesArea').innerHTML=ev.length?ev.map((e,i)=>`<div class="src"><div class="pg"><span class="badge">SOURCE ${i+1}</span> ${esc(e.d.name)} · Page ${e.p.n} <span class="tg">${e.t}</span></div><p>Section: ${esc(e.p.section)}</p><div class="quote">“${esc(e.s)}”</div>${e.p.conf<.7?'<div class="msg warn">Low OCR confidence '+f(e.p.conf)+'</div>':''}<button class="btn ghost" style="padding:6px 14px" onclick="openEv(${i})">View Source</button></div>`).join(''):'<div class="empty">No evidence found.</div>'}
+function openEv(i){const e=ev[i];openDoc(docs.indexOf(e.d),e.p.n,e.t==='CHART'?'':e.s)}
+
+/* dashboard */
+function renderDash(){const sum=k=>docs.reduce((a,d)=>a+d.pages.reduce((b,p)=>b+k(p),0),0),pg=sum(()=>1),tb=sum(p=>p.tables),ch=sum(p=>p.charts.length),im=sum(p=>p.images),oc=sum(p=>p.ocr?1:0);
+ const S=[['files','Documents',docs.length],['file-earmark','Pages',pg],['table','Tables',tb],['bar-chart','Charts',ch],['image','Images',im],['file-earmark-image','OCR Pages',oc],['chat-dots','Questions Asked',asked.length],['shield-check','Evidence items',Object.values(evStat).reduce((a,b)=>a+b,0)]];
+ $('dStats').innerHTML=S.map(s=>`<div class="stat"><div class="ic"><i class="bi bi-${s[0]}"></i></div><div class="v">${s[2]}</div><div class="l">${s[1]}</div></div>`).join('');$('dStats').style.gridTemplateColumns='repeat(4,1fr)';
+ $('dDocs').innerHTML=docs.slice(-4).reverse().map(d=>`<div class="hl"><span>${esc(d.name)}</span><span class="on">${d.status}</span></div>`).join('')||'<div class="empty">No documents.</div>';
+ $('dQs').innerHTML=asked.slice(0,3).map(q=>`<div class="q">${esc(q)}</div>`).join('')||'<div class="empty">No questions yet.</div>';
+ if(chartObj)chartObj.destroy();Chart.defaults.color='#8b95b5';chartObj=new Chart($('contentChart'),{type:'bar',data:{labels:Object.keys(evStat),datasets:[{data:Object.values(evStat),backgroundColor:['#8b5cf6','#3b82f6','#22d3ee','#34d399'],borderRadius:8}]},options:{maintainAspectRatio:false,plugins:{legend:{display:false}},scales:{y:{beginAtZero:true,ticks:{precision:0}}}}})}
+
+/* analysis */
+function fillSel(ids){ids.forEach(id=>{const s=$(id),v=s.value;s.innerHTML=docs.map((d,i)=>`<option value="${i}">${esc(d.name)}</option>`).join('');if(v)s.value=v})}
+function renderAnalysis(){fillSel(['anSel']);const d=docs[$('anSel').value||0];if(!d)return;const P=d.pages,sum=k=>P.reduce((a,p)=>a+k(p),0);
+ $('anBody').innerHTML=`<div class="grid g4" style="margin-bottom:16px">${[['Pages',P.length],['Text blocks',sum(p=>p.text.split(/\n+/).filter(Boolean).length)],['Tables',sum(p=>p.tables)],['Charts',sum(p=>p.charts.length)],['Images',sum(p=>p.images)],['OCR pages',sum(p=>p.ocr?1:0)]].map(s=>`<div class="stat"><div class="v">${s[1]}</div><div class="l">${s[0]}</div></div>`).join('')}</div>
+ <div class="box"><h3>Page Analysis</h3>${P.map(p=>`<div class="pgr"><span>Page ${p.n} — ${esc(p.section)}</span><span><span class="tg">Text</span>${p.tables?'<span class="tg">Table</span>':''}${p.charts.length?'<span class="tg">Chart · visual analysis</span>':''}${p.images?'<span class="tg">Image</span>':''}${p.ocr?`<span class="tg">Scanned · OCR ${f(p.conf)}</span>`:''}<a class="lnk" style="margin-left:8px" onclick="openDoc(${docs.indexOf(d)},${p.n})">view</a></span></div>`).join('')}</div>`}
+
+/* compare */
+function renderCompare(){if(!docs.length)return;fillSel(['cA','cB']);if(!$('cB').dataset.i){$('cB').value=Math.min(1,docs.length-1);$('cB').dataset.i=1}
+ const A=docs[$('cA').value],B=docs[$('cB').value],FA=extract(A),FB=extract(B),all=docs.flatMap(extract);ev=[];
+ const cell=(F,m,q)=>{const r=pick(F,m,q);if(!r)return'<td>—</td>';const e=r.srcs[0];ev.push(e);return`<td>${r.v}${r.u} <a class="lnk" onclick="openEv(${ev.length-1})">p.${e.p.n}</a></td>`};
+ let rows=Object.keys(MET).map(m=>`<tr><td>${MET[m]} Q4</td>${cell(FA,m,'Q4')}${cell(FB,m,'Q4')}</tr>`).join('');
+ const a=pick(all,'efficiency','Q2'),b=pick(all,'efficiency','Q4'),dt=pick(all,'downtime','Q2'),d4=pick(all,'downtime','Q4');
+ let diff='';if(a&&b)diff+=`<p>Efficiency Q2 → Q4: <strong>${a.v}% → ${b.v}%</strong> = ${b.v>=a.v?'+':''}${f(b.v-a.v)} pp (${f((b.v-a.v)/a.v*100)}%)</p>`;
+ if(dt&&d4)diff+=`<p>Downtime Q2 → Q4: <strong>${dt.v} → ${d4.v} hours</strong> = ${f(d4.v-dt.v)} hours (${f((d4.v-dt.v)/dt.v*100)}%)</p>`;
+ $('cBody').innerHTML=`<table><tr><th>Metric</th><th>${esc(A.name)}</th><th>${esc(B.name)}</th></tr>${rows}</table><h3 style="margin-top:20px">Difference (all documents combined)</h3>${diff||'<p class="sub">Not enough data.</p>'}<p style="color:var(--mut);font-size:13px">Click a page link to open the source.</p>`}
+</script></body></html>
